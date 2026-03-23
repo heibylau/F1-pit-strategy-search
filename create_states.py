@@ -1,5 +1,5 @@
 '''
-The file converts data from OpenF1 into states (lap, compound, tire aga, total time)
+The file converts data from OpenF1 into a state representation (lap, compound, tire aga, total time)
 '''
 
 import pandas as pd
@@ -18,7 +18,7 @@ driver_stints = df_stints[df_stints['driver_number'] == driver_number]
 states = []
 total_time = 0.0
 
-# 3. Iterate through the laps to build the state representation
+# Build the state representation
 for _, lap_row in driver_laps.iterrows():
     lap = lap_row['lap_number']
     
@@ -27,13 +27,11 @@ for _, lap_row in driver_laps.iterrows():
         
     total_time += lap_row['lap_duration']
     
-    # Find the corresponding stint for the current lap
     stint = driver_stints[(driver_stints['lap_start'] <= lap) & (driver_stints['lap_end'] >= lap)]
     
     if not stint.empty:
         stint = stint.iloc[0]
         compound = stint['compound']
-        # Calculate current tire age: base age + laps completed in this stint
         tire_age = stint['tyre_age_at_start'] + (lap - stint['lap_start'])
     else:
         compound = "UNKNOWN"
@@ -45,10 +43,6 @@ for _, lap_row in driver_laps.iterrows():
         'tire_age': int(tire_age),
         'total_time': round(total_time, 3)
     })
-
-# Output the first 5 states to verify
-# for state in states[:5]:
-#     print(state)
 
 with open('./data/cleaned/states.json', 'w') as output:
     json.dump(states, output, indent=4)
