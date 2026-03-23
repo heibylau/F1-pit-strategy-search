@@ -1,0 +1,350 @@
+[
+    {
+        "lap": 1,
+        "compound": "MEDIUM",
+        "tire_age": 0,
+        "total_time": 88.702
+    },
+    {
+        "lap": 2,
+        "compound": "MEDIUM",
+        "tire_age": 1,
+        "total_time": 171.302
+    },
+    {
+        "lap": 3,
+        "compound": "MEDIUM",
+        "tire_age": 2,
+        "total_time": 254.308
+    },
+    {
+        "lap": 4,
+        "compound": "MEDIUM",
+        "tire_age": 3,
+        "total_time": 336.741
+    },
+    {
+        "lap": 5,
+        "compound": "MEDIUM",
+        "tire_age": 4,
+        "total_time": 419.37
+    },
+    {
+        "lap": 6,
+        "compound": "MEDIUM",
+        "tire_age": 5,
+        "total_time": 501.942
+    },
+    {
+        "lap": 7,
+        "compound": "MEDIUM",
+        "tire_age": 6,
+        "total_time": 584.376
+    },
+    {
+        "lap": 8,
+        "compound": "MEDIUM",
+        "tire_age": 7,
+        "total_time": 666.679
+    },
+    {
+        "lap": 9,
+        "compound": "MEDIUM",
+        "tire_age": 8,
+        "total_time": 748.704
+    },
+    {
+        "lap": 10,
+        "compound": "MEDIUM",
+        "tire_age": 9,
+        "total_time": 830.419
+    },
+    {
+        "lap": 11,
+        "compound": "MEDIUM",
+        "tire_age": 10,
+        "total_time": 912.357
+    },
+    {
+        "lap": 12,
+        "compound": "MEDIUM",
+        "tire_age": 11,
+        "total_time": 994.532
+    },
+    {
+        "lap": 13,
+        "compound": "MEDIUM",
+        "tire_age": 12,
+        "total_time": 1076.737
+    },
+    {
+        "lap": 14,
+        "compound": "MEDIUM",
+        "tire_age": 13,
+        "total_time": 1159.224
+    },
+    {
+        "lap": 15,
+        "compound": "MEDIUM",
+        "tire_age": 14,
+        "total_time": 1241.844
+    },
+    {
+        "lap": 16,
+        "compound": "MEDIUM",
+        "tire_age": 15,
+        "total_time": 1338.154
+    },
+    {
+        "lap": 17,
+        "compound": "HARD",
+        "tire_age": 1,
+        "total_time": 1441.919
+    },
+    {
+        "lap": 18,
+        "compound": "HARD",
+        "tire_age": 2,
+        "total_time": 1531.849
+    },
+    {
+        "lap": 19,
+        "compound": "HARD",
+        "tire_age": 3,
+        "total_time": 1613.66
+    },
+    {
+        "lap": 20,
+        "compound": "HARD",
+        "tire_age": 4,
+        "total_time": 1695.262
+    },
+    {
+        "lap": 21,
+        "compound": "HARD",
+        "tire_age": 5,
+        "total_time": 1777.193
+    },
+    {
+        "lap": 22,
+        "compound": "HARD",
+        "tire_age": 6,
+        "total_time": 1858.664
+    },
+    {
+        "lap": 23,
+        "compound": "HARD",
+        "tire_age": 7,
+        "total_time": 1940.195
+    },
+    {
+        "lap": 24,
+        "compound": "HARD",
+        "tire_age": 8,
+        "total_time": 2021.653
+    },
+    {
+        "lap": 25,
+        "compound": "HARD",
+        "tire_age": 9,
+        "total_time": 2102.896
+    },
+    {
+        "lap": 26,
+        "compound": "HARD",
+        "tire_age": 10,
+        "total_time": 2183.974
+    },
+    {
+        "lap": 27,
+        "compound": "HARD",
+        "tire_age": 11,
+        "total_time": 2265.431
+    },
+    {
+        "lap": 28,
+        "compound": "HARD",
+        "tire_age": 12,
+        "total_time": 2346.871
+    },
+    {
+        "lap": 29,
+        "compound": "HARD",
+        "tire_age": 13,
+        "total_time": 2428.36
+    },
+    {
+        "lap": 30,
+        "compound": "HARD",
+        "tire_age": 14,
+        "total_time": 2509.983
+    },
+    {
+        "lap": 31,
+        "compound": "HARD",
+        "tire_age": 15,
+        "total_time": 2591.265
+    },
+    {
+        "lap": 32,
+        "compound": "HARD",
+        "tire_age": 16,
+        "total_time": 2672.47
+    },
+    {
+        "lap": 33,
+        "compound": "HARD",
+        "tire_age": 17,
+        "total_time": 2753.965
+    },
+    {
+        "lap": 34,
+        "compound": "HARD",
+        "tire_age": 18,
+        "total_time": 2835.682
+    },
+    {
+        "lap": 35,
+        "compound": "HARD",
+        "tire_age": 19,
+        "total_time": 2917.403
+    },
+    {
+        "lap": 36,
+        "compound": "HARD",
+        "tire_age": 20,
+        "total_time": 2999.421
+    },
+    {
+        "lap": 37,
+        "compound": "HARD",
+        "tire_age": 21,
+        "total_time": 3081.392
+    },
+    {
+        "lap": 38,
+        "compound": "HARD",
+        "tire_age": 22,
+        "total_time": 3162.804
+    },
+    {
+        "lap": 39,
+        "compound": "HARD",
+        "tire_age": 23,
+        "total_time": 3244.358
+    },
+    {
+        "lap": 40,
+        "compound": "HARD",
+        "tire_age": 24,
+        "total_time": 3325.801
+    },
+    {
+        "lap": 41,
+        "compound": "HARD",
+        "tire_age": 25,
+        "total_time": 3421.311
+    },
+    {
+        "lap": 42,
+        "compound": "HARD",
+        "tire_age": 1,
+        "total_time": 3508.526
+    },
+    {
+        "lap": 43,
+        "compound": "HARD",
+        "tire_age": 2,
+        "total_time": 3589.256
+    },
+    {
+        "lap": 44,
+        "compound": "HARD",
+        "tire_age": 3,
+        "total_time": 3670.023
+    },
+    {
+        "lap": 45,
+        "compound": "HARD",
+        "tire_age": 4,
+        "total_time": 3750.246
+    },
+    {
+        "lap": 46,
+        "compound": "HARD",
+        "tire_age": 5,
+        "total_time": 3830.62
+    },
+    {
+        "lap": 47,
+        "compound": "HARD",
+        "tire_age": 6,
+        "total_time": 3910.823
+    },
+    {
+        "lap": 48,
+        "compound": "HARD",
+        "tire_age": 7,
+        "total_time": 3990.854
+    },
+    {
+        "lap": 49,
+        "compound": "HARD",
+        "tire_age": 8,
+        "total_time": 4071.135
+    },
+    {
+        "lap": 50,
+        "compound": "HARD",
+        "tire_age": 9,
+        "total_time": 4151.585
+    },
+    {
+        "lap": 51,
+        "compound": "HARD",
+        "tire_age": 10,
+        "total_time": 4231.668
+    },
+    {
+        "lap": 52,
+        "compound": "HARD",
+        "tire_age": 11,
+        "total_time": 4311.877
+    },
+    {
+        "lap": 53,
+        "compound": "HARD",
+        "tire_age": 12,
+        "total_time": 4392.492
+    },
+    {
+        "lap": 54,
+        "compound": "HARD",
+        "tire_age": 13,
+        "total_time": 4473.074
+    },
+    {
+        "lap": 55,
+        "compound": "HARD",
+        "tire_age": 14,
+        "total_time": 4553.827
+    },
+    {
+        "lap": 56,
+        "compound": "HARD",
+        "tire_age": 15,
+        "total_time": 4634.925
+    },
+    {
+        "lap": 57,
+        "compound": "HARD",
+        "tire_age": 16,
+        "total_time": 4715.807
+    },
+    {
+        "lap": 58,
+        "compound": "HARD",
+        "tire_age": 17,
+        "total_time": 4827.17
+    }
+]

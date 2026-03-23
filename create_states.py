@@ -1,0 +1,54 @@
+'''
+The file converts data from OpenF1 into states (lap, compound, tire aga, total time)
+'''
+
+import pandas as pd
+import json
+
+with open('./data/raw/laps.json') as f:
+    df_laps = pd.DataFrame(json.load(f))
+with open('./data/raw/stints.json') as f:
+    df_stints = pd.DataFrame(json.load(f))
+
+driver_number = 55  # Driver number for Carlos Sainz
+
+driver_laps = df_laps[df_laps['driver_number'] == driver_number].sort_values('lap_number')
+driver_stints = df_stints[df_stints['driver_number'] == driver_number]
+
+states = []
+total_time = 0.0
+
+# 3. Iterate through the laps to build the state representation
+for _, lap_row in driver_laps.iterrows():
+    lap = lap_row['lap_number']
+    
+    if pd.isna(lap_row['lap_duration']):
+        continue
+        
+    total_time += lap_row['lap_duration']
+    
+    # Find the corresponding stint for the current lap
+    stint = driver_stints[(driver_stints['lap_start'] <= lap) & (driver_stints['lap_end'] >= lap)]
+    
+    if not stint.empty:
+        stint = stint.iloc[0]
+        compound = stint['compound']
+        # Calculate current tire age: base age + laps completed in this stint
+        tire_age = stint['tyre_age_at_start'] + (lap - stint['lap_start'])
+    else:
+        compound = "UNKNOWN"
+        tire_age = 0
+        
+    states.append({
+        'lap': int(lap),
+        'compound': compound,
+        'tire_age': int(tire_age),
+        'total_time': round(total_time, 3)
+    })
+
+# Output the first 5 states to verify
+# for state in states[:5]:
+#     print(state)
+
+with open('./data/cleaned/states.json', 'w') as output:
+    json.dump(states, output, indent=4)
