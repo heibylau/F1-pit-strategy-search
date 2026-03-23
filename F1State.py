@@ -1,0 +1,30 @@
+class F1State:
+    '''
+    This class represents a state in the pit stop strategy search problem.
+    The state is represented by the following attributes:
+        - lap (int): current lap number
+        - compound (str): current tire compound (hard, medium, or soft)
+        - tire_age (int): number of laps completed with the current tire
+    '''
+
+    def __init__(self, lap, compound, tire_age):
+        self.lap = lap
+        self.compound = compound
+        self.tire_age = tire_age
+
+    def __repr__(self):
+        state_str = ""
+        state_str += f"Current lap: {self.lap}\n"
+        state_str += f"Current tire compound: {self.compound}\n"
+        state_str += f"Current tire age: {self.tire_age:.2f}\n"
+        return state_str
+
+    def __hash__(self):
+        return hash((self.lap, self.compound, self.tire_age))
+
+    def __eq__(self, state):
+        return (isinstance(state, F1State) and 
+                self.lap == state.lap and
+                self.compound == state.compound and
+                self.tire_age == state.tire_age)
+    
