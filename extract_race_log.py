@@ -53,5 +53,5 @@ for _, lap_row in driver_laps.iterrows():
         'total_time': round(total_time, 3)
     })
 
-with open('./data/cleaned/states.json', 'w') as output:
+with open('./data/paths/path_sainz.json', 'w') as output:
     json.dump(states, output, indent=4)
