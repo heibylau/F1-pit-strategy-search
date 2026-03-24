@@ -28,3 +28,20 @@ class F1State:
                 self.compound == state.compound and
                 self.tire_age == state.tire_age)
     
+    def get_lap(self):
+        '''
+        Gets the current lap number
+        '''
+        return self.lap
+    
+    def get_compound(self):
+        '''
+        Gets the current tire compound
+        '''
+        return self.compound
+    
+    def get_tire_age(self):
+        '''
+        Gets the current tire age
+        '''
+        return self.tire_age

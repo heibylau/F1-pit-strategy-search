@@ -1,6 +1,16 @@
-'''
-The file converts data from OpenF1 into a state representation (lap, compound, tire aga, total time)
-'''
+# -----------------------------------------------------------------------
+# This module extracts and cleans Carlos Sainz's lap and stint data
+# from the OpenF1 API for the 2024 Australian Grand Prix.
+#
+# The output is a simplified JSON log containing:
+#   - lap number
+#   - tire compound
+#   - tire age
+#   - cumulative total time
+#
+# Carlos Sainz won the 2024 Australian Grand Prix, so his real-world
+# strategy serves as a reference for this project.
+# -----------------------------------------------------------------------
 
 import pandas as pd
 import json
@@ -18,7 +28,6 @@ driver_stints = df_stints[df_stints['driver_number'] == driver_number]
 states = []
 total_time = 0.0
 
-# Build the state representation
 for _, lap_row in driver_laps.iterrows():
     lap = lap_row['lap_number']
     
