@@ -1,20 +1,18 @@
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
-df_stints = pd.read_json('data/raw/stints.json')
+df_stints = pd.read_json('./data/raw/stints.json')
+df_tire_degradation = pd.read_csv('./data/parameter/tire_degradation_model.csv')
+
 
 def _build_pit_dataset(total_laps=58):
-    '''
-    Creates a binary variable called pit, which is 0 if the driver continues with the current tire,
-    or 1 if drivers pits for a new tire. Also performs one-hot encoding for compound type.
-
-    The modified dataset is used to train a logistic regression model to see if a driver should pit or 
-    continue given a certain state.
-    '''
     rows = []
     df = df_stints.sort_values(
         ["meeting_key", "session_key", "driver_number", "stint_number"]
     )
+
+    tire_lookup = df_tire_degradation.set_index(["compound", "tire_age"])["expected_lap_time"].to_dict()
+
     for _, stint in df.iterrows():
         for lap in range(stint.lap_start, stint.lap_end + 1):
             tire_age = stint.tyre_age_at_start + (lap - stint.lap_start)
@@ -22,10 +20,15 @@ def _build_pit_dataset(total_laps=58):
 
             if lap == stint.lap_end and lap < total_laps:
                 action = 1  # pit
-            
+
             is_soft = 1 if stint.compound == "SOFT" else 0
             is_medium = 1 if stint.compound == "MEDIUM" else 0
             is_hard = 1 if stint.compound == "HARD" else 0
+
+            # Lookup expected lap time from tire degradation model
+            expected_lap_time = tire_lookup.get((stint.compound, tire_age), None)
+            if expected_lap_time is None:
+                expected_lap_time = df_tire_degradation[df_tire_degradation["compound"] == stint.compound]["expected_lap_time"].mean()
 
             rows.append({
                 "lap": lap,
@@ -35,11 +38,12 @@ def _build_pit_dataset(total_laps=58):
                 "is_soft": is_soft,
                 "is_medium": is_medium,
                 "is_hard": is_hard,
+                "expected_lap_time": expected_lap_time,
                 "pit": action
             })
     df = pd.DataFrame(rows)
     df.to_csv('./data/model/pit_dataset.csv', index=False)
-    return pd.DataFrame(rows)
+    return df
 
 
 def _build_compound_dataset(total_laps=58):
@@ -78,10 +82,9 @@ def _build_compound_dataset(total_laps=58):
                 "is_hard_before": is_hard_before,
                 "next_compound": next_stint.compound,
             })
-
     df = pd.DataFrame(rows)
     df.to_csv('./data/model/pit_compound_dataset.csv', index=False)
-    return pd.DataFrame(rows)
+    return df
 
 
 def create_regression_models():

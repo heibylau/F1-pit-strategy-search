@@ -17,7 +17,6 @@ def get_median_pit_loss():
     Gets the median pit lane time loss.
     '''
     median_pit_loss = df_pits['lane_duration'].median()
-    print(f"Constant Pit Action Cost: {median_pit_loss:.3f} seconds")
     return median_pit_loss
 
 

@@ -1,6 +1,7 @@
 import heapq
 import copy
 import numpy as np
+import pandas as pd
 from node import Node, LevinNode
 from F1State import F1State
 from model import create_regression_models
@@ -73,7 +74,7 @@ class AStar:
         while open_list:
             current = heapq.heappop(open_list)
             if current.is_goal(self.total_laps):
-                return (current.get_path(), current.get_g(), nodes_expanded)
+                return (current.get_path(), current.get_path_states(), current.get_g(), nodes_expanded)
             for neighbour in self.get_successors(current):
                 state_hash = hash(neighbour.state)
                 g_cost = neighbour.get_g()
@@ -82,23 +83,31 @@ class AStar:
                     heapq.heappush(open_list, neighbour)
             nodes_expanded += 1
 
-        return (None, -1, nodes_expanded)
+        return (None, None, -1, nodes_expanded)
     
 
 class LevinTreeSearch:
-    def __init__(self, total_laps):
+    def __init__(self, total_laps, pit_loss, tire_model):
         self.model_pit, self.model_comp = create_regression_models()
         self.total_laps = total_laps
+        self.pit_loss = pit_loss
+        self.tire_model = tire_model
 
     def get_levin_cost(self, node):
         return np.log(node.get_depth()) - node.get_p()
+    
+    def get_expected_lap_time(self, compound, tire_age):
+        expected_lap_time = self.tire_model.get((compound.upper(), tire_age), None)
+        if expected_lap_time is None:
+            expected_lap_time = np.mean(list(self.tire_model[compound.upper()].values()))
+        return expected_lap_time
     
     def levin_tree_search(self, initial_state: F1State, budget=5000):
         open = []
         closed = {}
         nodes_expanded = 0
 
-        root = LevinNode(state=initial_state, g=1, prob=1.0)
+        root = LevinNode(state=initial_state, prob=1.0, depth=1)
 
         heapq.heappush(open, root)
 
@@ -108,8 +117,10 @@ class LevinTreeSearch:
 
             parent = heapq.heappop(open)
             state = parent.get_state()
+            compound = state.get_compound()
+            tire_age = state.get_tire_age()
 
-            action_probs = parent.get_action_probs(self.model_pit, self.model_comp, self.total_laps)
+            action_probs = parent.get_action_probs(self.model_pit, self.model_comp, self.tire_model, self.total_laps)
 
             for action, prob in action_probs.items():
                 if prob <= 0:
@@ -118,17 +129,24 @@ class LevinTreeSearch:
                 child_state = copy.deepcopy(state)
                 child_state.apply_action(action) 
 
+                if action == "continue":
+                    lap_time = self.get_expected_lap_time(compound, tire_age + 1)
+                elif action.startswith("pit_"):
+                    new_comp = action.split("_")[1]
+                    lap_time = self.pit_loss + self.get_expected_lap_time(new_comp, 1)
+
                 child_node = LevinNode(
                     state=child_state,
                     parent=parent,
                     action=action,
-                    g=parent.g + 1,
-                    prob=parent.get_p() * prob
+                    g=parent.get_g() + lap_time,
+                    prob=parent.get_p() * prob,
+                    depth=parent.get_depth() + 1
                 )
                 child_node.set_levin_cost(self.get_levin_cost(child_node))
 
                 if child_node.is_goal(self.total_laps):
-                    return child_node.get_path(), nodes_expanded
+                    return (child_node.get_path(), child_node.get_path_states(), child_node.get_g(), nodes_expanded)
                 
                 h = hash(child_state) 
 
@@ -137,4 +155,4 @@ class LevinTreeSearch:
                     heapq.heappush(open, child_node)
             nodes_expanded += 1
 
-        return None, nodes_expanded
+        return (None, None, -1, nodes_expanded)

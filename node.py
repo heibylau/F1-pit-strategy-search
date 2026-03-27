@@ -85,26 +85,35 @@ class Node:
             actions.append((node.state.lap, node.action))
             node = node.parent
         return list(reversed(actions))
+    
+    def get_path_states(self):
+        states = []
+        node = self
+        while node.parent is not None:
+            states.append((node.state.lap, node.state.compound, node.state.tire_age, node.g))
+            node = node.parent
+        return list(reversed(states))
 
 
 class LevinNode(Node):
     '''
     This subclass reprents a node used for Levin Tree Search. It extends Node.
     '''
-    def __init__(self, state, parent=None, action=None, g=0.0, h=0.0, prob=1.0):
+    def __init__(self, state, parent=None, action=None, g=0.0, h=0.0, prob=1.0, depth=1):
         super().__init__(state, parent, action, g, h)
         self.prob = prob
+        self.depth = depth
 
     def __lt__(self, node):
         return self.levin_cost < node.levin_cost
     
     def get_depth(self):
-        return self.g
+        return self.depth
     
     def get_p(self):
         return self.prob
 
-    def get_action_probs(self, model_pit, model_comp, total_laps=58):
+    def get_action_probs(self, model_pit, model_comp, tire_model, total_laps=58):
         state = self.get_state()
         lap = state.get_lap()
         tire_age = state.get_tire_age()
@@ -114,12 +123,18 @@ class LevinNode(Node):
         is_medium = 1 if compound == "MEDIUM" else 0
         is_hard = 1 if compound == "HARD" else 0
 
+        expected_lap_time = tire_model.get((compound, tire_age), None)
+        if expected_lap_time is None:
+            # use mean lap time for the compound
+            expected_lap_time = np.mean(list(tire_model[compound.upper()].values()))
+
         x_pit = pd.DataFrame([{
             "lap": lap,
             "laps_remaining": laps_remaining,
             "tire_age": tire_age,
             "is_medium": is_medium,
-            "is_hard": is_hard
+            "is_hard": is_hard,
+            "expected_lap_time": expected_lap_time
         }])
 
         pit_probs = model_pit.predict_proba(x_pit)[0]
@@ -140,9 +155,9 @@ class LevinNode(Node):
 
         action_probs = {
             "continue": P_continue,
-            "pit_soft": P_pit * prob_map.get("SOFT", 0.0),
-            "pit_medium": P_pit * prob_map.get("MEDIUM", 0.0),
-            "pit_hard": P_pit * prob_map.get("HARD", 0.0),
+            "pit_SOFT": P_pit * prob_map.get("SOFT", 0.0),
+            "pit_MEDIUM": P_pit * prob_map.get("MEDIUM", 0.0),
+            "pit_HARD": P_pit * prob_map.get("HARD", 0.0),
         }
         return action_probs
     
