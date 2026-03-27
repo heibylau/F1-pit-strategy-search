@@ -45,3 +45,19 @@ class F1State:
         Gets the current tire age
         '''
         return self.tire_age
+    
+    def apply_action(self, action):
+        """
+        Updates the state based on the action taken.
+        Actions can be:
+            - "continue": keep current tire
+            - "pit_soft", "pit_medium", "pit_hard": change to that compound
+        """
+        if action == "continue":
+            self.lap += 1
+            self.tire_age += 1
+        elif action.startswith("pit_"):
+            new_compound = action.split("_")[1].upper() 
+            self.compound = new_compound
+            self.tire_age = 0
+            self.lap += 1

@@ -1,5 +1,5 @@
 from get_parameters import get_median_pit_loss, get_max_stint_length, get_degradation_model
-from search import AStar
+from search import AStar, LevinTreeSearch
 from F1State import F1State
 
 
@@ -14,3 +14,9 @@ initial_state = F1State(0, "MEDIUM", 0)
 path, cost, expanded = astar.a_star(initial_state)
 print(path)
 print(cost)
+print(expanded)
+
+levin = LevinTreeSearch(total_laps=58)
+path, expanded = levin.levin_tree_search(initial_state)
+print(path)
+print(expanded)

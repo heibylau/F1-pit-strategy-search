@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd 
+
 class Node:
     '''
     This class represents a node used for search algorithms.
@@ -91,3 +94,57 @@ class LevinNode(Node):
     def __init__(self, state, parent=None, action=None, g=0.0, h=0.0, prob=1.0):
         super().__init__(state, parent, action, g, h)
         self.prob = prob
+
+    def __lt__(self, node):
+        return self.levin_cost < node.levin_cost
+    
+    def get_depth(self):
+        return self.g
+    
+    def get_p(self):
+        return self.prob
+
+    def get_action_probs(self, model_pit, model_comp, total_laps=58):
+        state = self.get_state()
+        lap = state.get_lap()
+        tire_age = state.get_tire_age()
+        compound = state.get_compound()
+        laps_remaining = total_laps - lap
+
+        is_medium = 1 if compound == "MEDIUM" else 0
+        is_hard = 1 if compound == "HARD" else 0
+
+        x_pit = pd.DataFrame([{
+            "lap": lap,
+            "laps_remaining": laps_remaining,
+            "tire_age": tire_age,
+            "is_medium": is_medium,
+            "is_hard": is_hard
+        }])
+
+        pit_probs = model_pit.predict_proba(x_pit)[0]
+        P_continue = pit_probs[0]
+        P_pit = pit_probs[1]
+
+        x_comp = pd.DataFrame([{
+            "lap": lap,
+            "laps_remaining": laps_remaining,
+            "tire_age": tire_age,
+            "is_medium_before": is_medium,
+            "is_hard_before": is_hard
+        }])
+
+        comp_probs = model_comp.predict_proba(x_comp)[0]
+        classes = model_comp.classes_
+        prob_map = dict(zip(classes, comp_probs))
+
+        action_probs = {
+            "continue": P_continue,
+            "pit_soft": P_pit * prob_map.get("SOFT", 0.0),
+            "pit_medium": P_pit * prob_map.get("MEDIUM", 0.0),
+            "pit_hard": P_pit * prob_map.get("HARD", 0.0),
+        }
+        return action_probs
+    
+    def set_levin_cost(self, c):
+        self.levin_cost = c
