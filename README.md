@@ -2,7 +2,7 @@
 Models Formula One pit stop strategy as a deterministic sequential decision problem
 and solves it using A\* and Levin's Tree Search.
 
-### Setup
+## Setup
 Clone this repo and install the dependencies:
 ```bash
 pip install -r requirements.txt
@@ -12,7 +12,7 @@ After installing the requirements, run the project:
 python main.py
 ```
 
-### Project Structure
+## Project Structure
 ```
 .
 ├── main.py            # Entry point for running the strategy search
@@ -26,5 +26,5 @@ python main.py
 └── images/            # Visualizations
 ```
 
-### Data
+## Data
 This project uses data from the 2024 Australian Grand Prix, obtained via the [OpenF1 API](https://openf1.org).
