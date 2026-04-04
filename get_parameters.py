@@ -1,9 +1,9 @@
-#------------------------------------------------------------------
-# This module extracts the key parameters from raw race data:
-# 1. Median pit lane time loss (pit stop cost)
-# 2. Maximum observed stint length per tire compound
-# 3. Tire degradation model by compound and tire age
-#------------------------------------------------------------------
+'''
+This module extracts the key parameters from raw race data:
+    - Median pit lane time loss (pit stop cost)
+    - Maximum observed stint length per tire compound
+    - Tire degradation model by compound and tire age
+'''
 
 import pandas as pd
 
@@ -35,7 +35,6 @@ def smooth_and_normalize(degradation):
     Applies smoothing and normalization to degradation data.
     Lap times are smoothed using rolling average.
     '''
-
     degradation = degradation.sort_values(['compound', 'tire_age']).copy()
     # Applies rolling average
     degradation['smoothed_time'] = (
@@ -52,7 +51,6 @@ def smooth_and_normalize(degradation):
     degradation['relative_deg'] = (
         degradation['smoothed_time'] - degradation['base_time']
     )
-
     return degradation
 
 

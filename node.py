@@ -87,6 +87,10 @@ class Node:
         return list(reversed(actions))
     
     def get_path_states(self):
+        '''
+        Gets the recovered path that also includes the tire compound, tire age, 
+        and cumulative race time.
+        '''
         states = []
         node = self
         while node.parent is not None:
@@ -105,15 +109,27 @@ class LevinNode(Node):
         self.depth = depth
 
     def __lt__(self, node):
+        '''
+        The less than operator compares the levin cost between two nodes.
+        '''
         return self.levin_cost < node.levin_cost
     
     def get_depth(self):
+        '''
+        Gets the depth of the node.
+        '''
         return self.depth
     
     def get_p(self):
+        '''
+        Gets the probability to reach the node.
+        '''
         return self.prob
 
     def get_action_probs(self, model_pit, model_comp, tire_model, total_laps=58):
+        '''
+        Computes the probabilities of possible actions for the current state.
+        '''
         state = self.get_state()
         lap = state.get_lap()
         tire_age = state.get_tire_age()
@@ -162,4 +178,7 @@ class LevinNode(Node):
         return action_probs
     
     def set_levin_cost(self, c):
+        '''
+        Sets the levin cost.
+        '''
         self.levin_cost = c

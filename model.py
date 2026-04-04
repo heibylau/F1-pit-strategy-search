@@ -1,3 +1,14 @@
+'''
+This module creates two modified datasets, which are used to fit two different
+logistic regression models that will be used to calculating the probability of the action 
+taken to reach a node in Levin Tree Search.
+
+The purpose of building these models is to provide a more realistic guiding policy 
+that better reflects real-world behaviour during a race. For example, a driver is less 
+likely to pit at the very beginning or end of a race, and more likely to pit as their 
+stint becomes longer.
+'''
+
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
@@ -6,6 +17,10 @@ df_tire_degradation = pd.read_csv('./data/parameter/tire_degradation_model.csv')
 
 
 def _build_pit_dataset(total_laps=58):
+    '''
+    Creates a dataset that is used to train a logistic regression model to see if 
+    a driver should continue or pit. 
+    '''
     rows = []
     df = df_stints.sort_values(
         ["meeting_key", "session_key", "driver_number", "stint_number"]
@@ -88,6 +103,13 @@ def _build_compound_dataset(total_laps=58):
 
 
 def create_regression_models():
+    '''
+    Fits the datasets into two logistic regression models: one for predicting 
+    pit decisions and another for predicting the next tire compound choice.
+
+    The "newton-cholesky" solver is chosen because it is efficient when the 
+    number of samples is much larger than the number of features.
+    '''
     df_pit = _build_pit_dataset()
     df_compound = _build_compound_dataset()
 
