@@ -1,6 +1,6 @@
 # F1 Pit Stop Strategy Search
 Models Formula One pit stop strategy as a deterministic sequential decision problem
-and solves it using A\* and Levin's Tree Search.
+and solves it using A\* and Levin Tree Search.
 
 ## Setup
 Clone this repo and install the dependencies:
