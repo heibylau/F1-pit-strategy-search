@@ -30,19 +30,19 @@ class F1State:
     
     def get_lap(self):
         '''
-        Gets the current lap number
+        Gets the current lap number.
         '''
         return self.lap
     
     def get_compound(self):
         '''
-        Gets the current tire compound
+        Gets the current tire compound.
         '''
         return self.compound
     
     def get_tire_age(self):
         '''
-        Gets the current tire age
+        Gets the current tire age.
         '''
         return self.tire_age
     
@@ -51,13 +51,14 @@ class F1State:
         Updates the state based on the action taken.
         Actions can be:
             - "continue": keep current tire
-            - "pit_soft", "pit_medium", "pit_hard": change to that compound
+            - "pit_SOFT", "pit_MEDIUM", "pit_HARD": change to that compound
         """
         if action == "continue":
             self.lap += 1
-            self.tire_age += 1
+            if self.lap > 1:
+                self.tire_age += 1
         elif action.startswith("pit_"):
             new_compound = action.split("_")[1].upper() 
             self.compound = new_compound
-            self.tire_age = 0
+            self.tire_age = 1
             self.lap += 1

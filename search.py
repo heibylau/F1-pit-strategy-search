@@ -38,8 +38,10 @@ class AStar:
 
         # Continue with current tire
         if tire_age + 1 <= self.max_stints[compound] and (tire_age + 1 in self.tire_model[compound]):
+            next_lap = lap + 1
+            next_tire_age = tire_age + 1 if next_lap > 1 else tire_age
             next_lap_time = self.tire_model[compound][tire_age + 1]
-            next_state = F1State(lap + 1, compound, tire_age + 1)
+            next_state = F1State(next_lap, compound, next_tire_age)
             successors.append(Node(next_state, node, action="continue",
                                    g=node.g + next_lap_time,
                                    h=self.heuristic(next_state)))
@@ -87,16 +89,34 @@ class AStar:
     
 
 class LevinTreeSearch:
+    """
+    This class implements the Levin Tree Search algorithm.
+    """
     def __init__(self, total_laps, pit_loss, tire_model):
+        '''
+        When creating an instance of this class, two regression models will also be created:
+            - model_pit: logistic regression model for deciding if a driver should pit or continue
+            - model_comp: logistic regression model for deciding which compound to pit for given the 
+                          driver is pitting
+        '''
         self.model_pit, self.model_comp = create_regression_models()
         self.total_laps = total_laps
         self.pit_loss = pit_loss
         self.tire_model = tire_model
 
     def get_levin_cost(self, node):
+        '''
+        Gets the levin cost of a node.
+        '''
         return np.log(node.get_depth()) - node.get_p()
     
     def get_expected_lap_time(self, compound, tire_age):
+        '''
+        Gets the expected lap time from the tire degradation model. 
+        
+        If a lap time for the given compound and tire age is not available, 
+        the function falls back to using the average lap time for that compound.
+        '''
         expected_lap_time = self.tire_model.get((compound.upper(), tire_age), None)
         if expected_lap_time is None:
             expected_lap_time = np.mean(list(self.tire_model[compound.upper()].values()))
