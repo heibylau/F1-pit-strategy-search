@@ -3,7 +3,7 @@ import json
 
 def extract_sainz_race_log():
     '''
-    This module extracts and cleans Carlos Sainz's lap and stint data 
+    Extracts and cleans Carlos Sainz's lap and stint data 
     from the OpenF1 API for the 2024 Australian Grand Prix.
 
     The output is a simplified JSON log containing:
