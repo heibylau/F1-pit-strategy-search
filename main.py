@@ -27,7 +27,7 @@ astar = AStar(
 print("Running A*:")
 path, path_states, cost, expanded = astar.a_star(initial_state)
 generate_race_log(path_states, "./data/paths/path_a_star.json")
-print(f"Found solution with cost {cost} and expanded {expanded} nodes.")
+print(f"Found solution with total race time of {cost:.3f}s and expanded {expanded} nodes.")
 print(f"{path}\n")
 
 
@@ -40,7 +40,7 @@ levin = LevinTreeSearch(
 print("Running Levin Tree Search:")
 path, path_states, cost, expanded = levin.levin_tree_search(initial_state)
 generate_race_log(path_states, "./data/paths/path_levin.json")
-print(f"Found solution with cost {cost} and expanded {expanded} nodes.")
+print(f"Found solution with total race time of {cost:.3f}s and expanded {expanded} nodes.")
 print(path)
 
 
