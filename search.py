@@ -150,7 +150,7 @@ class LevinTreeSearch:
             action_probs = parent.get_action_probs(self.model_pit, self.model_comp, self.tire_model, self.total_laps)
 
             for action, prob in action_probs.items():
-                if prob <= 0 or prob < self.pruning_threshold:  # prunes based on the threshold for probability
+                if prob <= self.pruning_threshold:  # prunes based on the threshold for probability
                     continue 
 
                 child_state = copy.deepcopy(state)
