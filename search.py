@@ -92,7 +92,7 @@ class LevinTreeSearch:
     """
     This class implements the Levin Tree Search algorithm.
     """
-    def __init__(self, total_laps, pit_loss, tire_model):
+    def __init__(self, total_laps, pit_loss, tire_model, pruning_threshold=0):
         '''
         When creating an instance of this class, two regression models will also be created:
             - model_pit: logistic regression model for deciding if a driver should pit or continue
@@ -103,6 +103,13 @@ class LevinTreeSearch:
         self.total_laps = total_laps
         self.pit_loss = pit_loss
         self.tire_model = tire_model
+        self.pruning_threshold = pruning_threshold
+
+    def set_pruning_threshold(self, t):
+        '''
+        Sets the threshold for pruning.
+        '''
+        self.pruning_threshold = t
 
     def get_levin_cost(self, node):
         '''
@@ -143,7 +150,7 @@ class LevinTreeSearch:
             action_probs = parent.get_action_probs(self.model_pit, self.model_comp, self.tire_model, self.total_laps)
 
             for action, prob in action_probs.items():
-                if prob <= 0:
+                if prob <= 0 or prob < self.pruning_threshold:  # prunes based on the threshold for probability
                     continue 
 
                 child_state = copy.deepcopy(state)
