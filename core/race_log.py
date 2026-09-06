@@ -13,7 +13,7 @@ def extract_sainz_race_log():
         - cumulative total time
 
     Carlos Sainz won the 2024 Australian Grand Prix, so his real-world
-    strategy is used for evaluating A* and Levin Tree Search performance 
+    strategy is used for evaluating Levin Tree Search performance 
     for this project.
     '''
     with open('./data/raw/laps.json') as f:
@@ -26,19 +26,24 @@ def extract_sainz_race_log():
     driver_laps = df_laps[df_laps['driver_number'] == driver_number].sort_values('lap_number')
     driver_stints = df_stints[df_stints['driver_number'] == driver_number]
 
+    # Lap n is a pit lap when lap n+1 is a pit-out lap
+    pit_out_laps = set(
+        driver_laps[driver_laps['is_pit_out_lap'] == True]['lap_number']
+    )
+
     states = []
     total_time = 0.0
 
     for _, lap_row in driver_laps.iterrows():
         lap = lap_row['lap_number']
-        
+
         if pd.isna(lap_row['lap_duration']):
             continue
-            
+
         total_time += lap_row['lap_duration']
-        
+
         stint = driver_stints[(driver_stints['lap_start'] <= lap) & (driver_stints['lap_end'] >= lap)]
-        
+
         if not stint.empty:
             stint = stint.iloc[0]
             compound = stint['compound']
@@ -46,12 +51,15 @@ def extract_sainz_race_log():
         else:
             compound = "UNKNOWN"
             tire_age = 0
-            
+
+        action = f"pit_{compound}" if (lap + 1) in pit_out_laps else "continue"
+
         states.append({
             'lap': int(lap),
             'compound': compound,
             'tire_age': int(tire_age),
-            'total_time': round(total_time, 3)
+            'total_time': round(total_time, 3),
+            'action': action,
         })
 
     with open('./data/paths/path_sainz.json', 'w') as output:
@@ -68,7 +76,8 @@ def generate_race_log(path, filename):
             "lap": state[0],
             "compound": state[1],
             "tire_age": state[2],
-            "total_time": state[3].item()
+            "total_time": float(state[3]),
+            "action": state[4],
         })
     with open(filename, "w") as f:
         json.dump(race_log, f, indent=4)
